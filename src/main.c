@@ -1,3 +1,4 @@
+#include "MKL25Z4.h"
 /* Define o endereço do registrador SIM_SCGC5 (Porta B: 10)*/
 #define SIM_SCGC5 (*((volatile unsigned int*)0x40048038))
 
@@ -21,17 +22,25 @@ void delayMs (int n) {
 }
 
 int main(void) {
-    SIM_SCGC5 |= (1<<10);
-    GPIOB_PDDR |= (1<<19);
-    PORTB_PCR19 |= (1<<8);
-    PORTB_PCR19 &= ~(1<<9);
-    PORTB_PCR19 &= ~(1<<10);
+    SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+    // ANTES: SIM_SCGC5 |= (1<<10);
+    
+    GPIOB->PDDR |= (1<<19);
+    // ANTES: GPIOB_PDDR |= (1<<19);
+
+    PORTB->PCR[19] = PORT_PCR_MUX(1);
+    // ANTES:
+    // PORTB_PCR19 |= (1<<8);
+    // PORTB_PCR19 &= ~(1<<9);
+    // PORTB_PCR19 &= ~(1<<10);
 
     for(;;) {
-        GPIOB_PDOR |= (1<<19);
-        delayMs(3000);
-        GPIOB_PDOR &= ~(1<<19);
-        delayMs(3000);
+        GPIOB->PTOR |= (1<<19);
+        //GPIOB_PDOR |= (1<<19);
+        delayMs(1500);
+        // ANTES: GPIOB_PDOR &= ~(1<<19);
+        GPIOB->PTOR &= ~(1<<19);
+        // delayMs(3000);
     }
 
     return 0;
