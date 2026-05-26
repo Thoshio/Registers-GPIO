@@ -1,3 +1,38 @@
-void main(void) {
- //vazio
+/* Define o endereço do registrador SIM_SCGC5 (Porta B: 10)*/
+#define SIM_SCGC5 (*((volatile unsigned int*)0x40048038))
+
+/* Define o endereço do registrador GPIOB_PDDR */
+#define GPIOB_PDDR (*((volatile unsigned int*)0x400FF054))
+
+/* Define o endereço do registrador GPIOB_PDOR */
+#define GPIOB_PDOR (*((volatile unsigned int*)0x400FF040))
+
+/* Define o endereço do registrador PORTB_PCR19 */
+#define PORTB_PCR19 (*((volatile unsigned int*)0x4004A04C))
+
+void delayMs (int n) {
+    /* Função: Espera n milisegundos */
+    /* esta função depende do clock default do microcontrolador. Para o KL25Z a frequência é 21 MHz aproximadamente. 
+    O valor do contador deverá ser ajustado para se conseguir o tempo de espera desejado. */
+	int i;
+	int j;
+	for (i = 0; i < n; i++)
+		for (j = 0; j < 7000; j++) {}
+}
+
+int main(void) {
+    SIM_SCGC5 |= (1<<10);
+    GPIOB_PDDR |= (1<<19);
+    PORTB_PCR19 |= (1<<8);
+    PORTB_PCR19 &= ~(1<<9);
+    PORTB_PCR19 &= ~(1<<10);
+
+    for(;;) {
+        GPIOB_PDOR |= (1<<19);
+        //delayMs(300000);
+        //GPIOB_PDOR &= ~(1<<19);
+        //delayMs(300000);
+    }
+
+    return 0;
 }
