@@ -14,8 +14,8 @@ void delayMs (int n) {
     /* Função: Espera n milisegundos */
     /* esta função depende do clock default do microcontrolador. Para o KL25Z a frequência é 21 MHz aproximadamente. 
     O valor do contador deverá ser ajustado para se conseguir o tempo de espera desejado. */
-	int i;
-	int j;
+	volatile int i;
+	volatile int j;
 	for (i = 0; i < n; i++)
 		for (j = 0; j < 7000; j++) {}
 }
@@ -29,9 +29,9 @@ int main(void) {
 
     for(;;) {
         GPIOB_PDOR |= (1<<19);
-        //delayMs(300000);
-        //GPIOB_PDOR &= ~(1<<19);
-        //delayMs(300000);
+        delayMs(3000);
+        GPIOB_PDOR &= ~(1<<19);
+        delayMs(3000);
     }
 
     return 0;
