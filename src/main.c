@@ -35,11 +35,11 @@ int main(void) {
     // PORTB_PCR19 &= ~(1<<10);
 
     for(;;) {
-        GPIOB->PTOR |= (1<<19);
+        GPIOB->PTOR |= GPIO_PTOR_PTTO_MASK;
         //GPIOB_PDOR |= (1<<19);
         delayMs(1500);
         // ANTES: GPIOB_PDOR &= ~(1<<19);
-        GPIOB->PTOR &= ~(1<<19);
+        GPIOB->PTOR &= ~GPIO_PTOR_PTTO_MASK;
         // delayMs(3000);
     }
 
